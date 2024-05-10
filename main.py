@@ -8,7 +8,7 @@ def count_words(text):
     words = text.split()
     return len(words)
 
-# A function that takes a string and returns all char occurences as dictionary
+# A function that takes a string and returns all char occurences as list of dictionaries
 def count_characters(text):
     dict = {}
     lowered_text = text.lower()
@@ -18,14 +18,40 @@ def count_characters(text):
         dict[char] = count
 
     chars = []
-    
+    for char in dict:
+        entry = {}
+        if char.isalpha():
+            entry["char"] = char
+            entry["count"] = dict[char]
+            chars.append(entry)
+
+    chars.sort(reverse=True, key=sort_on)
          
-    return dict
+    return chars
+
+# Sort function
+def sort_on(dict):
+    return dict["count"]
+
+# A Function that takes a path to a book and prints its wordcount and character count information
+def print_book_info(book_path):
+    text = get_book_text(book_path)
+    word_count = count_words(text)
+    characters = count_characters(text)
+    print(f"--- Begin report of {book_path} ---")
+    print(f"{word_count} words found in the document")
+    print("")
+    
+    for entry in characters:
+        print(f"The '{entry["char"]}' character was found {entry["count"]} times")
+
+    print("--- End report ---")
+
 
 def main():
     book_path = "books/frankenstein.txt"
-    text = get_book_text(book_path)
-    words = count_words(text)
-    characters = count_characters(text)
+    print_book_info(book_path)
     
+
+
 main()
